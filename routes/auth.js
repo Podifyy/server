@@ -18,8 +18,10 @@ authRouter.post("/api/signup", async (req, res) => {
     password,
     name
   });
+  const token = jwt.sign({id: user._id}, "passwordKey", );
   user = await user.save();
-  res.json(user);
+  res.json({token, ...user._doc})
+
   }
   catch(e){
     res.status(500).json({error: e.message});
@@ -37,8 +39,6 @@ authRouter.post("/api/signin", async (req, res) =>{
     if(!isMatch){
       return res.status(400).json({msg: "Password is incorrect"});
     }
-    const token = jwt.sign({id: user._id}, "passwordKey", );
-    res.json({token, ...user._doc})
   } catch(e){
     res.status(500).json({error: e.message});
   }
